@@ -18,7 +18,8 @@ const db=new sqlite3.Database("./test.db",sqlite3.OPEN_READWRITE,(err)=>{
 app.use(cors());
 
 app.get("/v1/users",async (req,res)=>{
-    sql=`SELECT * FROM users INNER JOIN posts ON users.id=posts.userId`
+    const search=req.query.searchText
+    sql=`SELECT * FROM users INNER JOIN posts ON users.id=posts.userId WHERE users.name LIKE "%${search}%"`
     db.all(sql,[],(err,rows)=>{
             if(err) return console.error(err.message)
             res.json(rows)
